@@ -12,10 +12,10 @@ O HC Fácil é uma aplicação web desenvolvida como parte do Challenge da FIAP.
 
 Links obrigatórios para a avaliação da Sprint 04.
 
-* **Deploy (Vercel):** `https://<URL-DO-SEU-DEPLOY-NA-VERCEL-AQUI>`
+* **Deploy (Vercel):** `https://hcfacil-s4vf.vercel.app/`
 * **Deploy (API JAVA Render):** `https://hcfacils4vf.onrender.com/hcFacilSprint4/`
-* **Repositório (GitHub):** `https://github.com/orlando-IDA/hcfacil-sprint4.git`
-* **Vídeo (YouTube):** `https://youtu.be/kihM0oGQTtI`
+* **Repositório (GitHub Site):** `https://github.com/orlando-IDA/hcfacil-sprint4.git`
+* **Vídeo (YouTube):** `https://www.youtube.com/watch?v=PFfi1GeQ8K8`
 
 ---
 
