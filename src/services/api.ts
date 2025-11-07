@@ -5,7 +5,7 @@ import type {
   IAtualizarRequest 
 } from '../types/PacienteType.ts';
 
-const API_URL = "http://localhost:8080/hcFacilSprint4"; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 async function handleJsonResponse(response: Response) {
   if (!response.ok) {
