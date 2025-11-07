@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { atualizarPaciente, excluirPaciente } from '../../services/api';
 import type { IAtualizarRequest } from '../../types/PacienteType';
 import { useNavigate } from 'react-router-dom';
+import { maskCPF, maskTelefone } from '../../utils/mask';
 
 const formatDateForInput = (dateStr: string | undefined): string => {
   if (!dateStr) return '';
@@ -47,8 +48,8 @@ const PerfilPage: React.FC = () => {
         nomePaciente: user.nomePaciente,
         email: user.email,
         dataDeNascimentoPaciente: formatDateForInput(user.dataDeNascimentoPaciente),
-        telefoneContato: user.telefoneContato,
-        cpfPaciente: user.cpfPaciente,
+        telefoneContato: maskTelefone(user.telefoneContato),
+        cpfPaciente: maskCPF(user.cpfPaciente),
         dataCadastro: formatDateForInput(user.dataCadastro),
       });
     }
@@ -56,9 +57,15 @@ const PerfilPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    let maskedValue = value;
+    if (name === 'telefoneContato') {
+      maskedValue = maskTelefone(value);
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: maskedValue,
     }));
   };
 
@@ -69,8 +76,14 @@ const PerfilPage: React.FC = () => {
 
     if (!user) return;
 
+    const dataToSend: IAtualizarRequest = {
+      ...formData,
+      cpfPaciente: formData.cpfPaciente.replace(/\D/g, ''),
+      telefoneContato: formData.telefoneContato.replace(/\D/g, ''),
+    };
+
     try {
-      const updatedUser = await atualizarPaciente(user.codigoPaciente, formData);
+      const updatedUser = await atualizarPaciente(user.codigoPaciente, dataToSend);
       await reloadUser(updatedUser.codigoPaciente); 
       setMessage({ type: 'success', text: 'Dados atualizados com sucesso!' });
     } catch (err) {
@@ -127,6 +140,7 @@ const PerfilPage: React.FC = () => {
                 disabled
                 readOnly
                 className="w-full p-2 mt-1 border border-gray-300 rounded-md bg-gray-100"
+                maxLength={14}
               />
             </div>
 
@@ -171,7 +185,8 @@ const PerfilPage: React.FC = () => {
                 value={formData.telefoneContato}
                 onChange={handleChange}
                 className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-                maxLength={11}
+                maxLength={15}
+                placeholder="(11) 98888-7777"
                 required
               />
             </div>
