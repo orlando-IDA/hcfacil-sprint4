@@ -121,88 +121,90 @@ const PerfilPage: React.FC = () => {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Meu Perfil</h1>
 
-        <form onSubmit={handleUpdate} className="p-6 bg-white rounded-lg shadow-md space-y-4">
-          <h2 className="text-xl font-semibold">Seus Dados</h2>
+        <form onSubmit={handleUpdate} className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-6">Seus Dados</h2>
           
-          <div>
-            <label htmlFor="cpfPaciente" className="block text-sm font-medium text-gray-700">
-              CPF (não pode ser alterado)
-            </label>
-            <input
-              id="cpfPaciente"
-              name="cpfPaciente"
-              type="text"
-              value={formData.cpfPaciente}
-              disabled
-              readOnly
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md bg-gray-100"
-              maxLength={14}
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-6">
+            <div>
+              <label htmlFor="cpfPaciente" className="block text-sm font-medium text-gray-700">
+                CPF (não pode ser alterado)
+              </label>
+              <input
+                id="cpfPaciente"
+                name="cpfPaciente"
+                type="text"
+                value={formData.cpfPaciente}
+                disabled
+                readOnly
+                className="w-full p-2 mt-1 border border-gray-300 rounded-md bg-gray-100"
+                maxLength={14}
+              />
+            </div>
 
-          <div>
-            <label htmlFor="nomePaciente" className="block text-sm font-medium text-gray-700">
-              Nome Completo
-            </label>
-            <input
-              id="nomePaciente"
-              name="nomePaciente"
-              type="text"
-              value={formData.nomePaciente}
-              onChange={handleChange}
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="nomePaciente" className="block text-sm font-medium text-gray-700">
+                Nome Completo
+              </label>
+              <input
+                id="nomePaciente"
+                name="nomePaciente"
+                type="text"
+                value={formData.nomePaciente}
+                onChange={handleChange}
+                className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="telefoneContato" className="block text-sm font-medium text-gray-700">
-              Telefone
-            </label>
-            <input
-              id="telefoneContato"
-              name="telefoneContato"
-              type="tel"
-              value={formData.telefoneContato}
-              onChange={handleChange}
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-              maxLength={15}
-              placeholder="(11) 98888-7777"
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="telefoneContato" className="block text-sm font-medium text-gray-700">
+                Telefone
+              </label>
+              <input
+                id="telefoneContato"
+                name="telefoneContato"
+                type="tel"
+                value={formData.telefoneContato}
+                onChange={handleChange}
+                className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                maxLength={15}
+                placeholder="(11) 98888-7777"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="dataDeNascimentoPaciente" className="block text-sm font-medium text-gray-700">
-              Data de Nascimento
-            </label>
-            <input
-              id="dataDeNascimentoPaciente"
-              name="dataDeNascimentoPaciente"
-              type="date"
-              value={formData.dataDeNascimentoPaciente}
-              onChange={handleChange}
-              className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-              required
-            />
+            <div className="md:col-span-2">
+              <label htmlFor="dataDeNascimentoPaciente" className="block text-sm font-medium text-gray-700">
+                Data de Nascimento
+              </label>
+              <input
+                id="dataDeNascimentoPaciente"
+                name="dataDeNascimentoPaciente"
+                type="date"
+                value={formData.dataDeNascimentoPaciente}
+                onChange={handleChange}
+                className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
           </div>
 
           <input
@@ -212,7 +214,7 @@ const PerfilPage: React.FC = () => {
           />
 
           {message && (
-            <div className={`p-3 text-sm rounded-md ${
+            <div className={`p-3 mt-6 text-sm rounded-md ${
               message.type === 'success' 
                 ? 'bg-green-100 text-green-800' 
                 : 'bg-red-100 text-red-800'
@@ -224,7 +226,7 @@ const PerfilPage: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="w-full mt-6 px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
             {isLoading ? 'Salvando...' : 'Salvar Alterações'}
           </button>
