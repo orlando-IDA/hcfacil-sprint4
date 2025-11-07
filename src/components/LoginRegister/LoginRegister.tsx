@@ -1,138 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import type { RegisterData, LoginData, User } from '../../types/User';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { cadastrarPaciente } from '../../services/api';
+import type { ILoginRequest, ICadastroRequest } from '../../types/PacienteType.ts';
 
 const LoginRegister: React.FC = () => {
   const [activeForm, setActiveForm] = useState<'login' | 'cadastro'>('login');
-  const [usersCount, setUsersCount] = useState(0);
-  const [pageLoadTime, setPageLoadTime] = useState<Date | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/home';
 
-  useEffect(() => {
-    setPageLoadTime(new Date());
-    const listaUser = JSON.parse(localStorage.getItem('listaUser') || '[]');
-    setUsersCount(listaUser.length);
-  }, []);
+  const [loginCpf, setLoginCpf] = useState('');
+  const [loginSenha, setLoginSenha] = useState('');
 
-  useEffect(() => {
-    if (usersCount > 0) {
-      console.log(`Número de usuários atualizado: ${usersCount}`);
+  const [cadNome, setCadNome] = useState('');
+  const [cadEmail, setCadEmail] = useState('');
+  const [cadCpf, setCadCpf] = useState('');
+  const [cadDtNasc, setCadDtNasc] = useState('');
+  const [cadTelefone, setCadTelefone] = useState('');
+  const [cadSenha, setCadSenha] = useState('');
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    const data: ILoginRequest = {
+      cpf: loginCpf,
+      senha: loginSenha,
+    };
+
+    try {
+      await login(data);
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
     }
-  }, [usersCount]);
-
-  const {
-    register: registerCadastro,
-    handleSubmit: handleSubmitCadastro,
-    formState: { errors: errorsCadastro },
-  } = useForm<RegisterData>();
-
-  const {
-    register: registerLogin,
-    handleSubmit: handleSubmitLogin,
-    formState: { errors: errorsLogin },
-  } = useForm<LoginData>();
-
-  const onSubmitCadastro: SubmitHandler<RegisterData> = (data) => {
-    const listaUser: User[] = JSON.parse(localStorage.getItem('listaUser') || '[]');
-    listaUser.push({
-      nomeCad: data.nome,
-      emailCad: data.email,
-      cpfCad: data.cadCPF,
-      telefoneCad: data.cadTelefone
-    });
-    localStorage.setItem('listaUser', JSON.stringify(listaUser));
-    setUsersCount(listaUser.length);
-    alert('Cadastro realizado com sucesso!');
-    navigate('/home');
   };
 
-  const onSubmitLogin: SubmitHandler<LoginData> = (data) => {
-    console.log('Login realizado:', data);
-    alert('Login realizado com sucesso!');
-    navigate('/home');
+  const handleCadastroSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    const data: ICadastroRequest = {
+      nomePaciente: cadNome,
+      cpfPaciente: cadCpf,
+      dataDeNascimentoPaciente: cadDtNasc,
+      telefoneContato: cadTelefone,
+      email: cadEmail,
+      senha: cadSenha,
+    };
+
+    try {
+      await cadastrarPaciente(data);
+      alert('Cadastro realizado com sucesso! Faça o login para continuar.');
+      setActiveForm('login');
+      setCadNome('');
+      setCadEmail('');
+      setCadCpf('');
+      setCadDtNasc('');
+      setCadTelefone('');
+      setCadSenha('');
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const switchForm = (form: 'login' | 'cadastro') => {
+    setError(null);
+    setActiveForm(form);
   };
 
   return (
-    <main className="flex-1 bg-gray-100 flex justify-center items-center p-4">
+    <main className="flex-1 bg-gray-100 flex justify-center items-center p-4 min-h-screen">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="flex justify-around mb-6">
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-            onClick={() => setActiveForm('login')}
+            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            onClick={() => switchForm('login')}
           >
             Login
           </button>
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-            onClick={() => setActiveForm('cadastro')}
+            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            onClick={() => switchForm('cadastro')}
           >
             Cadastro
           </button>
         </div>
 
-        {pageLoadTime && (
-          <div className="text-sm text-gray-500 mb-4 text-center">
-            Página carregada às: {pageLoadTime.toLocaleTimeString()}
-          </div>
-        )}
+        {error && (
+            <div className="p-3 mb-4 text-sm text-center text-red-800 bg-red-100 rounded-md">
+              {error}
+            </div>
+          )}
 
         {activeForm === 'login' && (
-          <form onSubmit={handleSubmitLogin(onSubmitLogin)} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label htmlFor="loginCPF" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="loginCpf" className="block text-sm font-medium text-gray-700 mb-1">
                 CPF
               </label>
               <input
                 type="text"
-                id="loginCPF"
-                placeholder="Digite seu CPF"
-                className={`w-full p-2 border rounded-md ${errorsLogin.loginCPF ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerLogin('loginCPF', {
-                  required: 'O CPF é obrigatório',
-                  minLength: { value: 11, message: 'O CPF deve ter 11 dígitos' },
-                  maxLength: { value: 11, message: 'O CPF deve ter 11 dígitos' },
-                })}
+                id="loginCpf"
+                placeholder="Digite seu CPF (apenas números)"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={loginCpf}
+                onChange={(e) => setLoginCpf(e.target.value)}
+                maxLength={11}
+                required
               />
-              {errorsLogin.loginCPF && <p className="text-red-500 text-sm mt-1">{errorsLogin.loginCPF.message}</p>}
             </div>
-
             <div>
-              <label htmlFor="loginTelefone" className="block text-sm font-medium text-gray-700 mb-1">
-                Telefone
+              <label htmlFor="loginSenha" className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
               </label>
               <input
-                type="text"
-                id="loginTelefone"
-                placeholder="Digite seu telefone"
-                className={`w-full p-2 border rounded-md ${errorsLogin.loginTelefone ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerLogin('loginTelefone', {
-                  required: 'O telefone é obrigatório',
-                  minLength: { value: 11, message: 'O telefone deve ter 11 dígitos' },
-                  maxLength: { value: 11, message: 'O telefone deve ter 11 dígitos' },
-                  pattern: { value: /^[0-9]+$/, message: 'Digite apenas números' },
-                })}
+                type="password"
+                id="loginSenha"
+                placeholder="••••••••"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={loginSenha}
+                onChange={(e) => setLoginSenha(e.target.value)}
+                required
               />
-              {errorsLogin.loginTelefone && <p className="text-red-500 text-sm mt-1">{errorsLogin.loginTelefone.message}</p>}
             </div>
-
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors"
+              disabled={isLoading}
+              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
             >
-              Entrar
+              {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
         )}
 
         {activeForm === 'cadastro' && (
-          <form onSubmit={handleSubmitCadastro(onSubmitCadastro)} className="space-y-4">
-            <div className="text-center mb-2">
-              <span className="text-sm text-gray-600">
-                Usuários cadastrados: <strong>{usersCount}</strong>
-              </span>
-            </div>
-
+          <form onSubmit={handleCadastroSubmit} className="space-y-4">
             <div>
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
                 Nome Completo
@@ -140,16 +154,12 @@ const LoginRegister: React.FC = () => {
               <input
                 type="text"
                 id="nome"
-                placeholder="Digite seu nome completo"
-                className={`w-full p-2 border rounded-md ${errorsCadastro.nome ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerCadastro('nome', {
-                  required: 'O nome é obrigatório',
-                  minLength: { value: 3, message: 'O nome deve ter pelo menos 3 caracteres' },
-                })}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadNome}
+                onChange={(e) => setCadNome(e.target.value)}
+                required
               />
-              {errorsCadastro.nome && <p className="text-red-500 text-sm mt-1">{errorsCadastro.nome.message}</p>}
             </div>
-
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -157,16 +167,12 @@ const LoginRegister: React.FC = () => {
               <input
                 type="email"
                 id="email"
-                placeholder="Digite seu email"
-                className={`w-full p-2 border rounded-md ${errorsCadastro.email ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerCadastro('email', {
-                  required: 'O email é obrigatório',
-                  pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Formato de email inválido' },
-                })}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadEmail}
+                onChange={(e) => setCadEmail(e.target.value)}
+                required
               />
-              {errorsCadastro.email && <p className="text-red-500 text-sm mt-1">{errorsCadastro.email.message}</p>}
             </div>
-
             <div>
               <label htmlFor="cadCPF" className="block text-sm font-medium text-gray-700 mb-1">
                 CPF
@@ -174,41 +180,66 @@ const LoginRegister: React.FC = () => {
               <input
                 type="text"
                 id="cadCPF"
-                placeholder="Digite seu CPF"
-                className={`w-full p-2 border rounded-md ${errorsCadastro.cadCPF ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerCadastro('cadCPF', {
-                  required: 'O CPF é obrigatório',
-                  minLength: { value: 11, message: 'O CPF deve ter 11 dígitos' },
-                  maxLength: { value: 11, message: 'O CPF deve ter 11 dígitos' },
-                })}
+                placeholder="Apenas números"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadCpf}
+                onChange={(e) => setCadCpf(e.target.value)}
+                maxLength={11}
+                required
               />
-              {errorsCadastro.cadCPF && <p className="text-red-500 text-sm mt-1">{errorsCadastro.cadCPF.message}</p>}
             </div>
 
             <div>
               <label htmlFor="cadTelefone" className="block text-sm font-medium text-gray-700 mb-1">
-                Telefone
+                Telefone (com DDD)
               </label>
               <input
-                type="text"
+                type="tel"
                 id="cadTelefone"
-                placeholder="Digite seu telefone"
-                className={`w-full p-2 border rounded-md ${errorsCadastro.cadTelefone ? 'border-red-500' : 'border-gray-300'}`}
-                {...registerCadastro('cadTelefone', {
-                  required: 'O telefone é obrigatório',
-                  minLength: { value: 11, message: 'O telefone deve ter 11 dígitos' },
-                  maxLength: { value: 11, message: 'O telefone deve ter 11 dígitos' },
-                  pattern: { value: /^[0-9]+$/, message: 'Digite apenas números' },
-                })}
+                placeholder="11988887777"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadTelefone}
+                onChange={(e) => setCadTelefone(e.target.value)}
+                maxLength={11}
+                required
               />
-              {errorsCadastro.cadTelefone && <p className="text-red-500 text-sm mt-1">{errorsCadastro.cadTelefone.message}</p>}
+            </div>
+            
+            <div>
+              <label htmlFor="dtNasc" className="block text-sm font-medium text-gray-700 mb-1">
+                Data de Nascimento
+              </label>
+              <input
+                type="date"
+                id="dtNasc"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadDtNasc}
+                onChange={(e) => setCadDtNasc(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="cadSenha" className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
+              <input
+                type="password"
+                id="cadSenha"
+                placeholder="Mínimo 6 caracteres"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                value={cadSenha}
+                onChange={(e) => setCadSenha(e.target.value)}
+                minLength={6}
+                required
+              />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors"
+              disabled={isLoading}
+              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
             >
-              Cadastrar
+              {isLoading ? 'Cadastrando...' : 'Cadastrar'}
             </button>
           </form>
         )}
