@@ -35,7 +35,6 @@ async function handleEmptyResponse(response: Response) {
   return; 
 }
 
-
 export async function cadastrarPaciente(data: ICadastroRequest): Promise<IPaciente> {
   const response = await fetch(`${API_URL}/cadastro`, {
     method: 'POST',

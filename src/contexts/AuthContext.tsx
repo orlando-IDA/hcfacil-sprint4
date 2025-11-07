@@ -5,22 +5,22 @@ import React, {
   useEffect 
 } from 'react';
 import type { ReactNode } from 'react';
-import type { ILoginRequest, IPaciente } from '../types/PacienteType';
+import type { ILoginRequest, IPaciente } from '../types/PacienteType.ts';
 import { login as apiLogin, getPacienteById } from '../services/api.ts';
 
 interface IAuthContext {
-  user: IPaciente | null;      // O objeto do usuário logado ou null
-  isLoading: boolean;           // true enquanto checa o localStorage
-  login: (credentials: ILoginRequest) => Promise<void>; // Função para logar
-  logout: () => void;           // Função para deslogar
-  reloadUser: (id: number) => Promise<void>; // Função para recarregar dados do usuário (ex: após atualizar perfil)
+  user: IPaciente | null;
+  isLoading: boolean;
+  login: (credentials: ILoginRequest) => Promise<void>;
+  logout: () => void;
+  reloadUser: (id: number) => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IPaciente | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Começa como true
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('hc_user');
@@ -39,11 +39,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (credentials: ILoginRequest) => {
     try {
       const userData = await apiLogin(credentials);
-      
       setUser(userData);
-    
       localStorage.setItem('hc_user', JSON.stringify(userData));
-
     } catch (error) {
       console.error("Erro no login:", error);
       throw error; 
@@ -62,7 +59,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem('hc_user', JSON.stringify(updatedUser));
     } catch (error) {
       console.error("Falha ao recarregar dados do usuário", error);
-      // Se falhar (ex: 404), desloga o usuário por segurança
       logout();
     }
   }

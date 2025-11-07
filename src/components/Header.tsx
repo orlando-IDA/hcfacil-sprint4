@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    alert('Saindo...');
+    logout();
     navigate('/welcome');
   };
 
@@ -30,7 +32,6 @@ const Header: React.FC = () => {
             />
           </NavLink>
 
-          {/* Menu para desktop */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8">
             <ul className="flex items-center gap-6 lg:gap-8">
               <li>
@@ -66,6 +67,16 @@ const Header: React.FC = () => {
                 </NavLink>
               </li>
             </ul>
+            
+            {user && (
+              <NavLink 
+                to="/perfil" 
+                className={({ isActive }) => `${baseLinkStyle} ${isActive ? activeLinkStyle : inactiveLinkStyle}`}
+              >
+                Bem-vindo, {user.nomePaciente.split(' ')[0]}
+              </NavLink>
+            )}
+
             <button 
               onClick={handleLogout}
               className="px-4 py-2 text-sm font-semibold text-red-600 border border-red-500 rounded-md hover:bg-red-500 hover:text-white transition-colors duration-300"
@@ -74,7 +85,6 @@ const Header: React.FC = () => {
             </button>
           </nav>
 
-          {/* Botão do menu mobile */}
           <button 
             className="md:hidden text-gray-700 focus:outline-none"
             onClick={toggleMenu}
@@ -90,10 +100,16 @@ const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Menu mobile */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pt-4 border-t border-gray-200">
             <ul className="flex flex-col gap-4">
+              {user && (
+                <li>
+                  <NavLink to="/perfil" className={({ isActive }) => `block py-2 ${isActive ? "text-blue-600 font-bold" : "text-gray-700"}`} onClick={() => setIsMenuOpen(false)}>
+                    MEU PERFIL
+                  </NavLink>
+                </li>
+              )}
               <li>
                 <NavLink to="/sobre" className={({ isActive }) => `block py-2 ${isActive ? "text-blue-600 font-bold" : "text-gray-700"}`} onClick={() => setIsMenuOpen(false)}>
                   SOBRE
@@ -116,7 +132,10 @@ const Header: React.FC = () => {
               </li>
               <li>
                 <button 
-                  onClick={handleLogout}
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
                   className="mt-4 w-full px-4 py-2 font-semibold text-red-600 border border-red-500 rounded-md hover:bg-red-500 hover:text-white transition-colors duration-300"
                 >
                   SAIR
