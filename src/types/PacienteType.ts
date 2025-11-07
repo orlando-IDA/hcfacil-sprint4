@@ -7,15 +7,16 @@ export interface IPaciente {
 }
 
 export interface ICadastroRequest {
-  nome: string;
+  nomePaciente: string;
+  cpfPaciente: string;
+  dataDeNascimentoPaciente: string; // Formato "YYYY-MM-DD"
+  telefoneContato: string;
   email: string;
-  cpf: string;
-  dt_nascimento: string; // Formato "YYYY-MM-DD"
   senha: string;
 }
 
 export interface ILoginRequest {
-  email: string;
+  cpf: string; 
   senha: string;
 }
 
