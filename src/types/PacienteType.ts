@@ -1,10 +1,11 @@
 export interface IPaciente {
-  id_paciente: number;
+  codigoPaciente: number;
   nomePaciente: string;
   cpfPaciente: string;
   dataDeNascimentoPaciente: string;
   telefoneContato: string;
   email: string;
+  dataCadastro: string; 
 }
 
 export interface ICadastroRequest {
@@ -22,8 +23,11 @@ export interface ILoginRequest {
 }
 
 export interface IAtualizarRequest {
+  codigoPaciente: number;
   nomePaciente: string;
+  cpfPaciente: string; 
   dataDeNascimentoPaciente: string;
   telefoneContato: string;
   email: string;
+  dataCadastro: string; 
 }
