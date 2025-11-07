@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { cadastrarPaciente } from '../../services/api';
 import type { ILoginRequest, ICadastroRequest } from '../../types/PacienteType.ts';
+import { maskCPF, maskTelefone } from '../../utils/mask.ts';
 
 const LoginRegister: React.FC = () => {
   const [activeForm, setActiveForm] = useState<'login' | 'cadastro'>('login');
@@ -30,7 +31,7 @@ const LoginRegister: React.FC = () => {
     setError(null);
 
     const data: ILoginRequest = {
-      cpf: loginCpf,
+      cpf: loginCpf.replace(/\D/g, ''), 
       senha: loginSenha,
     };
 
@@ -51,9 +52,9 @@ const LoginRegister: React.FC = () => {
 
     const data: ICadastroRequest = {
       nomePaciente: cadNome,
-      cpfPaciente: cadCpf,
+      cpfPaciente: cadCpf.replace(/\D/g, ''), // Remove não-dígitos
       dataDeNascimentoPaciente: cadDtNasc,
-      telefoneContato: cadTelefone,
+      telefoneContato: cadTelefone.replace(/\D/g, ''), // Remove não-dígitos
       email: cadEmail,
       senha: cadSenha,
     };
@@ -85,13 +86,13 @@ const LoginRegister: React.FC = () => {
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="flex justify-around mb-6">
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
             onClick={() => switchForm('login')}
           >
             Login
           </button>
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
             onClick={() => switchForm('cadastro')}
           >
             Cadastro
@@ -99,7 +100,7 @@ const LoginRegister: React.FC = () => {
         </div>
 
         {error && (
-            <div className="p-3 mb-4 text-sm text-center text-red-800 bg-red-100 rounded-md">
+            <div className="p-3 mb-4 text-sm text-center text-blue-800 bg-blue-100 rounded-md">
               {error}
             </div>
           )}
@@ -111,13 +112,13 @@ const LoginRegister: React.FC = () => {
                 CPF
               </label>
               <input
-                type="text"
+                type="text" 
                 id="loginCpf"
-                placeholder="Digite seu CPF (apenas números)"
+                placeholder="123.456.789-00"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={loginCpf}
-                onChange={(e) => setLoginCpf(e.target.value)}
-                maxLength={11}
+                onChange={(e) => setLoginCpf(maskCPF(e.target.value))}
+                maxLength={14}
                 required
               />
             </div>
@@ -138,7 +139,7 @@ const LoginRegister: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
@@ -173,18 +174,18 @@ const LoginRegister: React.FC = () => {
                 required
               />
             </div>
-            <div>
+           <div>
               <label htmlFor="cadCPF" className="block text-sm font-medium text-gray-700 mb-1">
                 CPF
               </label>
               <input
                 type="text"
                 id="cadCPF"
-                placeholder="Apenas números"
+                placeholder="123.456.789-00"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={cadCpf}
-                onChange={(e) => setCadCpf(e.target.value)}
-                maxLength={11}
+                onChange={(e) => setCadCpf(maskCPF(e.target.value))}
+                maxLength={14}
                 required
               />
             </div>
@@ -194,13 +195,13 @@ const LoginRegister: React.FC = () => {
                 Telefone (com DDD)
               </label>
               <input
-                type="tel"
+                type="tel" 
                 id="cadTelefone"
-                placeholder="11988887777"
+                placeholder="(11) 98888-7777"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={cadTelefone}
-                onChange={(e) => setCadTelefone(e.target.value)}
-                maxLength={11}
+                onChange={(e) => setCadTelefone(maskTelefone(e.target.value))}
+                maxLength={15} 
                 required
               />
             </div>
@@ -237,7 +238,7 @@ const LoginRegister: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Cadastrando...' : 'Cadastrar'}
             </button>

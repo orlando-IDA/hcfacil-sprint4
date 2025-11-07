@@ -1,48 +1,67 @@
-🏥 HC Fácil
+# 🏥 HC Fácil
+
+Projeto da Sprint 04 de Front-End Design Engineering (FIAP).
 
 🎯 **Objetivo do Projeto**
 
 O HC Fácil é uma aplicação web desenvolvida como parte do Challenge da FIAP. O principal objetivo do projeto é reduzir a taxa de abstenção em consultas online no Hospital das Clínicas, oferecendo uma plataforma mais simples e eficiente para que os pacientes possam gerenciar seus agendamentos e tirar dúvidas.
 
-🚀 **Como Utilizar o Site**
+---
+
+### 🔗 Links (Sprint 04)
+
+Links obrigatórios para a avaliação da Sprint 04.
+
+* **Deploy (Vercel):** `https://<URL-DO-SEU-DEPLOY-NA-VERCEL-AQUI>`
+* **Deploy (API JAVA Render):** `https://hcfacils4vf.onrender.com/hcFacilSprint4/`
+* **Repositório (GitHub):** `https://github.com/orlando-IDA/hcfacil-sprint4.git`
+* **Vídeo (YouTube):** `https://youtu.be/kihM0oGQTtI`
+
+---
+
+.env
+```
+VITE_API_URL="https://hcfacils4vf.onrender.com/hcFacilSprint4"
+```
+
+---
+
+## 🔗 API Backend
+
+O repositório da API utilizada neste projeto está disponível em: [HcFacilSprint4](https://github.com/ggabmartins/hcFacilS4VF)
+
+---
+
+
+### 🚀 Como Utilizar o Site
 
 **Fluxo de Navegação**
 
-1. **Página Inicial (Welcome)**
-   - Ao acessar o site, você será direcionado para a rota `/welcome`
-   - Esta página apresenta o HC Fácil e suas funcionalidades principais
-   - Clique no botão "Vamos Começar" para acessar o sistema
+1.  **Página Inicial (Welcome)**
+    * Ao acessar o site, você será direcionado para a rota `/welcome`
+    * Esta página apresenta o HC Fácil e suas funcionalidades principais
+    * Clique no botão "Vamos Começar" para acessar o sistema
 
-2. **Login do Usuário**
-   - Na tela de login, insira seus dados:
-     - **CPF**: Digite um CPF fictício com até 11 dígitos (apenas números)
-     - **Telefone**: Digite um número de telefone fictício com até 11 dígitos (apenas números)
-   - Ambos os campos são validados para terem exatamente 11 dígitos
-   - Clique em "Entrar" para acessar o sistema
+2.  **Login e Cadastro de Usuário**
+    * Na tela de login (`/login`), você pode alternar entre "Login" e "Cadastro".
+    * **Cadastro:** Crie um novo usuário com Nome, Email, CPF, Telefone, Data de Nascimento e Senha.
+    * **Login:** Insira seu **CPF** e **Senha** para acessar o sistema.
 
-3. **Página Principal (Home)**
-   - Após o login bem-sucedido, você será redirecionado para a `/home`
-   - Aqui você pode:
-     - Visualizar e gerenciar agendamentos de consultas
-     - Acessar tutoriais e vídeos explicativos
-     - Entrar em contato com o suporte
-     - Conhecer a equipe desenvolvedora
+3.  **Páginas Protegidas (Home)**
+    * Após o login bem-sucedido, você será redirecionado para a `/home` (ou para a página que tentou acessar).
+    * A partir daqui, você pode acessar as áreas restritas do paciente, como `/perfil` e `/marque-sua-consulta`.
 
-🛠️ **Tecnologias Utilizadas**
+### 🛠️ Tecnologias Utilizadas
 
-- **Front-End:**
-  - React (com Vite)
-  - TypeScript
-- **Estilização:**
-  - TailwindCSS
-- **Roteamento:**
-  - React Router DOM
-- **Formulários:**
-  - React Hook Form
-- **Fontes:**
-  - @fontsource/poppins (local)
+* **Core:** React (com Vite) e TypeScript
+* **Estilização:** TailwindCSS
+* **Roteamento:** React Router DOM (SPA)
+* **Gerenciamento de Estado:** React Context API (para autenticação)
+* **Comunicação API:** Fetch API (para consumo da API Java)
+* **Backend (API):** Java (Consumida remotamente)
+* **Deploy:** Vercel
 
-📂 **Estrutura de Pastas**
+---
 
 
 ```bash
@@ -60,7 +79,12 @@ HCFacil/
 │ ├── Welcome/
 │ │ └── Welcome.tsx
 │ ├── Header.tsx
+│ ├── ProtectedRoute.tsx
 │ └── MainLayout.tsx
+├── components/
+│   └── AuthContext.tsx
+├── services/
+│   └── api.ts
 ├── pages/
 │ ├── Contato/
 │ │ └── index.tsx
@@ -81,6 +105,8 @@ HCFacil/
 │ ├── MarqueConsulta/
 │ │ └── index.tsx
 │ ├── Sobre/
+│ │ └── index.tsx
+│ ├── Perfil/
 │ │ └── index.tsx
 │ ├── Video/
 │ │ └── index.tsx
@@ -129,8 +155,3 @@ Para rodar este projeto localmente, siga os passos abaixo:
 | Orlando Gonçalves | 561584 | 1TDSPG |
 
 ---
-
-## 🔗 Links do Projeto
-
-* **Link do Repositório GitHub:** `https://github.com/orlando-IDA/hcfacil-sprint3.git`
-* **Vídeo de Apresentação (YouTube):** `https://youtu.be/kihM0oGQTtI`

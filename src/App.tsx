@@ -13,6 +13,7 @@ import FaqPage from './pages/FAQ';
 import VideosPage from './pages/Video';
 import SobrePage from './pages/Sobre';
 import Error from './pages/Error';
+import PerfilPage from './pages/Perfil';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         >
           <Route path="/home" element={<HomePage />} />
           <Route path="/marque-sua-consulta" element={<MarqueSuaConsultaPage />} />
+          <Route path="/perfil" element={<PerfilPage />} />
         </Route>
         <Route element={<MainLayout />}>
           <Route path="/integrantes" element={<IntegrantesPage />} />

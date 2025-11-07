@@ -28,7 +28,7 @@ const SobrePage = () => {
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-blue-50 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">🎯 Objetivos</h3>
+              <h3 className="text-xl font-bold text-blue-900 mb-4">Objetivos</h3>
               <ul className="text-gray-700 space-y-3">
                 <li className="flex items-start">
                   <span className="text-blue-600 mr-2">•</span>
@@ -50,7 +50,7 @@ const SobrePage = () => {
             </div>
 
             <div className="bg-green-50 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-green-900 mb-4">💡 Benefícios</h3>
+              <h3 className="text-xl font-bold text-green-900 mb-4">Benefícios</h3>
               <ul className="text-gray-700 space-y-3">
                 <li className="flex items-start">
                   <span className="text-green-600 mr-2">•</span>

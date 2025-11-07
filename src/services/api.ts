@@ -5,7 +5,7 @@ import type {
   IAtualizarRequest 
 } from '../types/PacienteType.ts';
 
-const API_URL = "http://localhost:8080/hcFacilSprint4"; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 async function handleJsonResponse(response: Response) {
   if (!response.ok) {
@@ -35,8 +35,7 @@ async function handleEmptyResponse(response: Response) {
   return; 
 }
 
-
-export async function cadastrarPaciente(data: ICadastroRequest): Promise<IPaciente> {
+export async function cadastrarPaciente(data: ICadastroRequest): Promise<void> {
   const response = await fetch(`${API_URL}/cadastro`, {
     method: 'POST',
     headers: {
@@ -44,7 +43,8 @@ export async function cadastrarPaciente(data: ICadastroRequest): Promise<IPacien
     },
     body: JSON.stringify(data),
   });
-  return handleJsonResponse(response);
+  await handleJsonResponse(response);
+  return;
 }
 
 export async function login(data: ILoginRequest): Promise<IPaciente> {
@@ -59,14 +59,14 @@ export async function login(data: ILoginRequest): Promise<IPaciente> {
 }
 
 export async function getPacienteById(id: number): Promise<IPaciente> {
-  const response = await fetch(`${API_URL}/paciente/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'GET',
   });
   return handleJsonResponse(response);
 }
 
 export async function atualizarPaciente(id: number, data: IAtualizarRequest): Promise<IPaciente> {
-  const response = await fetch(`${API_URL}/atualizar/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export async function atualizarPaciente(id: number, data: IAtualizarRequest): Pr
 }
 
 export async function excluirPaciente(id: number): Promise<void> {
-  const response = await fetch(`${API_URL}/excluir/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
   });
   return handleEmptyResponse(response); 
