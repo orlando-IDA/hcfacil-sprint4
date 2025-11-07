@@ -8,7 +8,7 @@ O HC Fácil é uma aplicação web desenvolvida como parte do Challenge da FIAP.
 
 ---
 
-### 🔗 Links de Avaliação (Sprint 04)
+### 🔗 Links (Sprint 04)
 
 Links obrigatórios para a avaliação da Sprint 04.
 
@@ -17,8 +17,21 @@ Links obrigatórios para a avaliação da Sprint 04.
 * **Repositório (GitHub):** `https://github.com/orlando-IDA/hcfacil-sprint4.git`
 * **Vídeo (YouTube):** `https://youtu.be/kihM0oGQTtI`
 
+---
+
+.env
+```
+VITE_API_URL="https://hcfacils4vf.onrender.com/hcFacilSprint4"
+```
 
 ---
+
+## 🔗 API Backend
+
+O repositório da API utilizada neste projeto está disponível em: [HcFacilSprint4](https://github.com/ggabmartins/hcFacilS4VF)
+
+---
+
 
 ### 🚀 Como Utilizar o Site
 
