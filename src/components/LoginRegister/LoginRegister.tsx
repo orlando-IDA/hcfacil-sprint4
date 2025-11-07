@@ -86,13 +86,13 @@ const LoginRegister: React.FC = () => {
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="flex justify-around mb-6">
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            className={`px-4 py-2 font-medium ${activeForm === 'login' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
             onClick={() => switchForm('login')}
           >
             Login
           </button>
           <button
-            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500'}`}
+            className={`px-4 py-2 font-medium ${activeForm === 'cadastro' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
             onClick={() => switchForm('cadastro')}
           >
             Cadastro
@@ -100,7 +100,7 @@ const LoginRegister: React.FC = () => {
         </div>
 
         {error && (
-            <div className="p-3 mb-4 text-sm text-center text-red-800 bg-red-100 rounded-md">
+            <div className="p-3 mb-4 text-sm text-center text-blue-800 bg-blue-100 rounded-md">
               {error}
             </div>
           )}
@@ -139,7 +139,7 @@ const LoginRegister: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
@@ -238,7 +238,7 @@ const LoginRegister: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-600 text-white py-2 rounded-md font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Cadastrando...' : 'Cadastrar'}
             </button>
