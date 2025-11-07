@@ -1,27 +1,33 @@
 export interface IPaciente {
-  id_paciente: number;
-  nome: string;
+  codigoPaciente: number;
+  nomePaciente: string;
+  cpfPaciente: string;
+  dataDeNascimentoPaciente: string;
+  telefoneContato: string;
   email: string;
-  cpf: string;
-  dt_nascimento: string; // Formato "YYYY-MM-DD"
+  dataCadastro: string; 
 }
 
 export interface ICadastroRequest {
   nomePaciente: string;
   cpfPaciente: string;
-  dataDeNascimentoPaciente: string; // Formato "YYYY-MM-DD"
+  dataDeNascimentoPaciente: string;
   telefoneContato: string;
   email: string;
   senha: string;
 }
 
 export interface ILoginRequest {
-  cpf: string; 
+  cpf: string;
   senha: string;
 }
 
 export interface IAtualizarRequest {
-  nome: string;
+  codigoPaciente: number;
+  nomePaciente: string;
+  cpfPaciente: string; 
+  dataDeNascimentoPaciente: string;
+  telefoneContato: string;
   email: string;
-  dt_nascimento: string; // Formato "YYYY-MM-DD"
+  dataCadastro: string; 
 }
